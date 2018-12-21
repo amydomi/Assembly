@@ -100,7 +100,3 @@
         call _WinMain
         invoke ExitProcess, NULL
     end start
-    
-    ends
-    
-    
