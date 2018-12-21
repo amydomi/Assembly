@@ -16,12 +16,12 @@ includelib      user32.lib
 includelib      kernel32.lib
 
 ;Êý¾Ý¶Î
-    .data
-szText      db      'Hello assembly', 0
-szTitle     db      'Message', 0
+.data
+    szText      db      'Hello assembly', 0
+    szTitle     db      'Message', 0
 
 ;´úÂë¶Î
-    .code
+.code
 _main proc 
     invoke MessageBox, NULL, offset szText, offset szTitle, MB_OK or MB_ICONINFORMATION
     invoke ExitProcess, NULL
@@ -29,4 +29,3 @@ _main endp
 start:
     invoke _main
 end start
-ends
