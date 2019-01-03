@@ -28,7 +28,7 @@ start:  mov bx,data
         mov cx,16
 show:   mov al,ds:[si]
         mov es:[bx].0h[di],al
-        mov byte ptr es:[bx].1h[di],01000011b     ; 红底黄字 (青色:RGB=011)
+        mov byte ptr es:[bx].1h[di],01000011b     ; 红底青色 (青色:RGB=011)
         inc si
         add di,2
         loop show
