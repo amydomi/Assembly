@@ -6,7 +6,7 @@ option casemap:none
 printf proto c:vararg
 ExitProcess proto stdcall:dword
 
-; 创建一个字符常量
+; 创建一个字符常量, 0dh,0ah是回车换行符
 .const
 szHello db 'Hello, ASM!',0dh, 0ah, 0
 
