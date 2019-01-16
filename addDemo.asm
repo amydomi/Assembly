@@ -19,7 +19,7 @@ _str db '%d + %d = %d',0dh,0ah,0
 ; 简单的加法运算
 ; C语言写法：
 ;
-; void _add(int a, int b) {
+; int add(int a, int b) {
 ;   return a + b;
 ; }
 ; =======================================
