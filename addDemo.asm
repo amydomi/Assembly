@@ -39,12 +39,12 @@ _add endp
 ; }
 ; =======================================
 main proc
-    local @num1, @num2
-    mov @num1, 10
-    mov @num2, 20
-    invoke _add,@num1,@num2
-    invoke printf, addr _str, @num1, @num2, eax
-    invoke ExitProcess,0
+    local   @num1, @num2
+    mov     @num1, 10
+    mov     @num2, 20
+    invoke  _add,@num1,@num2
+    invoke  printf, addr _str, @num1, @num2, eax
+    invoke  ExitProcess,0
 main endp
 
 end main
