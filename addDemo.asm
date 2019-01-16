@@ -14,10 +14,9 @@ includelib msvcrt.lib
 _str db '%d + %d = %d',0dh,0ah,0
 
 .code
-
 ; =======================================
 ; 简单的加法运算
-; C语言写法：
+; C语言参考：
 ;
 ; int add(int a, int b) {
 ;   return a + b;
@@ -35,7 +34,7 @@ _add endp
 ;   int a, b;
 ;   a = 10;
 ;   b = 20;
-;   printf("%d + %d = %d'\n", add(a, b));
+;   printf("%d + %d = %d'\n", a, b, add(a, b));
 ; }
 ; =======================================
 main proc
