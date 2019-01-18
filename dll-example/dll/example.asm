@@ -14,7 +14,20 @@ option casemap:none
 
 .code
 ; dll入口函数，由操作系统调用
-_DllMain proc dwInstance, dwReason, dwModel
+;
+; instance: dll的模块句柄，非宿主句柄
+;
+; reason: 原因 (DLL生命周期状态)
+;       DLL_PROCESS_ATTACH      dll映射到宿主进程空间
+;       DLL_PROCESS_DETACH      dll从宿主进程空间解除映射
+;       DLL_THREAD_ATTACH       dll宿主创建线程
+;       DLL_THREAD_DETACH       dll宿主线程终结
+;
+; reserved 系统保留参数，用不到
+;
+; 返回值放入eax中，当eax非0时(TRUE) dll才能正常被装载
+;
+_DllMain proc instance, reason, reserved
     mov eax,1
     ret
 _DllMain endp
