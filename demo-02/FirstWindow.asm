@@ -1,102 +1,90 @@
 ;-------------------------------------
 ; 功能: 主窗口Demo
-; 作者: 黄海
-; 编写日期: 2018.12.01
+; 作者: dusksoft
+; 编写日期: 2019.01.20
 ;-------------------------------------
+.386
+.model flat,stdcall
+option casemap:none
 
-    .386
-    .model flat, stdcall
-    option casemap: none
+include windows.inc
+include user32.inc
+include kernel32.inc
+
+includelib user32.lib
+includelib kernel32.lib
+
+.const
+szClassName     db      'MyWindow',0
+szWindowName    db      'My Window',0
+
+.data?
+hInstance   dd              ?
+
+.code
+; 窗口消息过程
+;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+_wndProc proc _hWnd, _uMsg, _wParam, _lParam
+    mov     eax, _uMsg
     
-    include windows.inc
-    include gdi32.inc
-    include user32.inc
-    include kernel32.inc
+    .if eax == WM_CLOSE
+        invoke PostQuitMessage, 0
+        invoke DestroyWindow, _hWnd
+    .else
+        invoke  DefWindowProc, _hWnd, _uMsg, _wParam, _lParam
+        ret
+    .endif
+
+    xor eax, eax
+    ret
+_wndProc endp
+;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+_winMain proc
+    local   @wndClass: WNDCLASSEX
+    local   @msg: MSG
+    local   @hWnd
     
-    includelib gdi32.lib
-    includelib user32.lib
-    includelib kernel32.lib
+    ; 获取当前模块(进程)句柄,
+    ; C/C++是通过WinMain函数由系统传入，Win32汇编需要自己获取
+    invoke  GetModuleHandle,NULL
+    mov     hInstance, eax
     
-    ; 数据段
-    .data?
-    hInstance       dd      ?
-    hWndMain        dd      ?
+    ; 注册窗口类
+    mov     @wndClass.cbSize, sizeof @wndClass
+    mov     @wndClass.style, CS_HREDRAW or CS_VREDRAW
+    mov     @wndClass.lpfnWndProc, offset _wndProc
+    mov     @wndClass.cbClsExtra,0
+    mov     @wndClass.cbWndExtra,0
+    mov     eax, hInstance
+    mov     @wndClass.hInstance, eax
+    invoke  LoadIcon, hInstance, IDI_APPLICATION
+    mov     @wndClass.hIcon, eax
+    mov     @wndClass.hIconSm, eax
+    invoke  LoadCursor, hInstance,IDC_ARROW
+    mov     @wndClass.hCursor, eax
+    mov     @wndClass.hbrBackground,COLOR_WINDOW
+    mov     @wndClass.lpszMenuName, NULL
+    mov     @wndClass.lpszClassName,offset szClassName
     
-    .const
-    szClassName         db      'MyWindow', 0
-    szCaptionName       db      'My First Window!', 0
-    szText              db      'Win32 Assembly, Simple and powerful !', 0
+    invoke  RegisterClassEx, addr @wndClass
     
-    ;代码段
-    .code
+    ; 创建窗口
+    invoke  CreateWindowEx, WS_EX_APPWINDOW, offset szClassName, offset szWindowName, WS_OVERLAPPEDWINDOW,\
+            CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, NULL, NULL, hInstance, NULL
+    mov     @hWnd,eax
     
-    _WindowProc proc    uses ebx edi esi, hWnd, uMsg, wParam, lParam
-            local   @stPs:PAINTSTRUCT
-            local   @stRect: RECT
-            local   @hDc
-            
-            mov eax, uMsg
-            
-            .if     eax == WM_PAINT
-                    invoke BeginPaint, hWnd, addr @stPs
-                    mov @hDc, eax
-                
-                    invoke GetClientRect, hWnd, addr @stRect
-                    invoke DrawText, @hDc, addr szText, -1, addr @stRect, DT_SINGLELINE or DT_CENTER or DT_VCENTER
-                
-                    invoke EndPaint, hWnd, addr @stPs
-            .elseif eax == WM_CLOSE
-                    invoke DestroyWindow, hWndMain
-                    invoke PostQuitMessage, NULL
-            .else
-                    invoke DefWindowProc, hWnd, uMsg, wParam, lParam
-                    ret
-            .endif
-            
-            xor eax, eax
-            ret
-    _WindowProc endp
+    ; 显示 - 更新窗口
+    invoke  ShowWindow, @hWnd, SW_SHOW
+    invoke  UpdateWindow, @hWnd
     
-    _WinMain proc
-            local   @stWndClass: WNDCLASSEX
-            local   @stMsg: MSG
-            
-            invoke GetModuleHandle, NULL
-            mov hInstance, eax
-            
-            invoke RtlZeroMemory, addr @stWndClass, sizeof @stWndClass
-            
-            ; 注册窗口类
-            invoke  LoadCursor, 0, IDC_ARROW
-            mov     @stWndClass.hCursor,eax
-            push    hInstance
-            pop     @stWndClass.hInstance
-            mov     @stWndClass.cbSize, sizeof WNDCLASSEX
-            mov     @stWndClass.style, CS_HREDRAW or CS_VREDRAW
-            mov     @stWndClass.lpfnWndProc, offset _WindowProc
-            mov     @stWndClass.hbrBackground, COLOR_WINDOW + 1
-            mov     @stWndClass.lpszClassName, offset szClassName
-            invoke  RegisterClassEx, addr @stWndClass
-            
-            invoke CreateWindowEx, WS_EX_CLIENTEDGE, offset szClassName, offset szCaptionName, \
-                   WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, \
-                   NULL, NULL, hInstance, NULL
-            mov    hWndMain, eax
-            
-            invoke ShowWindow, hWndMain, SW_SHOW
-            invoke UpdateWindow, hWndMain
-            
-            ; 消息循环
-            .while TRUE
-                    invoke GetMessage, addr @stMsg, NULL, 0, 0
-                    .break .if eax == 0
-                    invoke TranslateMessage, addr @stMsg
-                    invoke DispatchMessage, addr @stMsg
-            .endw
-            ret
-    _WinMain endp
+    ; 消息循环
+    .while TRUE
+         invoke     GetMessage, addr @msg, NULL, 0, 0
+         .break .if eax == 0
+         invoke     TranslateMessage, addr @msg
+         invoke     DispatchMessage, addr @msg
+    .endw
     
-    start:
-        call _WinMain
-        invoke ExitProcess, NULL
-    end start
+    invoke  ExitProcess,NULL
+_winMain endp
+end _winMain
