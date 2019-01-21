@@ -22,6 +22,9 @@
 *.la
 *.lo
 
+# Resource
+*.res
+
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so

@@ -1,0 +1,14 @@
+ #include <resource.h>
+ 
+ #define MENU_MAIN 0x0010
+ #define ID_MENU_OPEN 0x0020
+ #define ID_MENU_EXIT 0x0030
+ 
+ MENU_MAIN   MENU
+ BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "打开(&O)", ID_MENU_OPEN
+        MENUITEM "退出(&Q)", ID_MENU_EXIT
+    END
+ END
