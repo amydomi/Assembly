@@ -100,7 +100,7 @@ WinMain proc
 ; 在这指定菜单只要指定资源ID即可
 ;   mov        @wndClass.lpszMenuName, MENU_MAIN
 
-;    mov         @wndClass.lpszMenuName, NULL              
+    mov         @wndClass.lpszMenuName, NULL              
     mov         @wndClass.lpszClassName, offset szClassName
     
     invoke      RegisterClassEx,addr @wndClass
