@@ -1,12 +1,16 @@
 #include <resource.h>
 
 #define     IDD_MAIN      1000
+#define     IDB_BTN1      2000
+#define     IDB_BTN2      3000
 
 IDD_MAIN    DIALOG  0, 0, 300, 200
 STYLE WS_OVERLAPPEDWINDOW - WS_THICKFRAME - WS_MAXIMIZEBOX | DS_CENTER
 CAPTION "My first window"
-FONT 9 "ËÎÌו"
+FONT 8 "MS shell Dlg"
 BEGIN
+    PUSHBUTTON "Button 1", IDB_BTN1, 10, 10, 60, 18
+    PUSHBUTTON "Button 2", IDB_BTN2, 80, 10, 60, 18
 END
 
 1   24  "manifest.xml"
