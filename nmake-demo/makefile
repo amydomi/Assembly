@@ -15,7 +15,7 @@ link_flag=/subsystem:windows
 $(exe): $(objs) $(res)
 	link $(link_flag) /out:$(exe) $(objs) $(res)
 $(objs): resource.inc
-$(res): manifest.xml
+$(res): manifest.xml small.ico
 
 # ƒ¨»œπÊ‘Ú
 .asm.obj:
