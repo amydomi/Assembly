@@ -16,18 +16,24 @@ szText      db     '是否关闭窗口？', 0
 szTitle     db      '消息', 0
 szBtnText1  db      '你点击了第一个按钮。', 0
 szBtnText2  db      '你点击了第二个按钮。', 0
+szDefString db      '默认文本', 0
 
 .data?
 hInstance   dd     ?
 
 .code
 commandProc proc hWnd, uMsg, wParam, lParam
+    local  szBuff[255]:byte
     mov      eax, wParam
     movzx    eax, ax
     .if eax == IDB_BTN1
         invoke      MessageBox, hWnd, offset szBtnText1, offset szTitle, MB_OK
     .elseif eax == IDB_BTN2
         invoke      MessageBox, hWnd, offset szBtnText2, offset szTitle, MB_OK
+    .elseif eax == IDB_BTN3
+        invoke      RtlZeroMemory, addr szBuff, sizeof szBuff
+        invoke      GetDlgItemText, hWnd, IDE_INPUT, addr szBuff, sizeof szBuff
+        invoke      MessageBox, hWnd, addr szBuff, offset szTitle, MB_OK
     .endif
     ret
 commandProc endp
@@ -41,6 +47,8 @@ dlgProc proc hWnd, uMsg, wParam, lParam
             invoke  EndDialog, hWnd, 0
         .endif
         mov     eax, TRUE
+    .elseif eax == WM_INITDIALOG
+        invoke      SetDlgItemText, hWnd, IDE_INPUT, offset szDefString
     .elseif eax == WM_COMMAND
         invoke      commandProc, hWnd, uMsg, wParam, lParam
     .else
