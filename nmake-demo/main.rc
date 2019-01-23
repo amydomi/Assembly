@@ -1,0 +1,12 @@
+#include <resource.h>
+
+#define     IDD_MAIN      1000
+
+IDD_MAIN    DIALOG  0, 0, 300, 200
+STYLE WS_OVERLAPPEDWINDOW - WS_THICKFRAME - WS_MAXIMIZEBOX | DS_CENTER
+CAPTION "My first window"
+FONT 9 "ËÎÌו"
+BEGIN
+END
+
+1   24  "manifest.xml"
