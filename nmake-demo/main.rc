@@ -7,10 +7,11 @@
 IDD_MAIN    DIALOG  0, 0, 300, 200
 STYLE WS_OVERLAPPEDWINDOW - WS_THICKFRAME - WS_MAXIMIZEBOX | DS_CENTER
 CAPTION "My first window"
-FONT 8 "MS shell Dlg"
+FONT 9 "SimSun"
 BEGIN
-    PUSHBUTTON "Button 1", IDB_BTN1, 10, 10, 60, 18
-    PUSHBUTTON "Button 2", IDB_BTN2, 80, 10, 60, 18
+    PUSHBUTTON "确定", IDB_BTN1, 10, 10, 50, 14
+    PUSHBUTTON "取消", IDB_BTN2, 65, 10, 50, 14
 END
 
-1   24  "manifest.xml"
+1       24      "manifest.xml"
+1       ICON    "small.ico"
