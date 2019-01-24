@@ -68,7 +68,7 @@ main endp
 start:
     invoke      GetModuleHandle, 0
     mov         hInstance, eax
-    call		InitCommonControls
+    call        InitCommonControls
     call        main
     invoke      ExitProcess, 0 
 end start
