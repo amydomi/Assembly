@@ -5,9 +5,11 @@ option casemap:none
 include windows.inc
 include kernel32.inc
 include user32.inc
+include comctl32.inc
 
 includelib kernel32.lib
 includelib user32.lib
+includelib comctl32.lib
 
 include resource.inc
 
@@ -66,6 +68,7 @@ main endp
 start:
     invoke      GetModuleHandle, 0
     mov         hInstance, eax
+    call		InitCommonControls
     call        main
     invoke      ExitProcess, 0 
 end start
